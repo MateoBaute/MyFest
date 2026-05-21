@@ -18,7 +18,7 @@ export async function POST(request) {
 
 
         const [rows] = await db.query(
-            "select * from users where dni = ?",
+            "select * from users where dni = ?", 
             [dni]
         )
         const user = rows[0];

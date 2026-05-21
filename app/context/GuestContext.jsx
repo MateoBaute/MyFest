@@ -8,33 +8,27 @@ const GuestContext = createContext(null);
 // Provider
 export function GuestProvider({ children }) {
   const [logged, setLogged] = useState(false);
-  const [guest, setGuest] = useState(null);
+
 
   useEffect(() => {
-    const savedGuest = localStorage.getItem("guest");
-    const savedToken = localStorage.getItem("token");
+    const savedToken = sessionStorage.getItem("token");
 
-    if (savedGuest && savedToken) {
-      setGuest(JSON.parse(savedGuest));
+    if (savedToken) {
       setLogged(true);
     }
   }, []);
 
-  useEffect(() => {
-    if (guest) {
-      localStorage.setItem("guest", JSON.stringify(guest));
-    }
-  }, [guest]);
+
 
   const logout = () => {
-    localStorage.removeItem("guest");
-    localStorage.removeItem("token");
-    setGuest(null);
+
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
     setLogged(false);
   };
 
   return (
-    <GuestContext.Provider value={{ guest, setGuest, logged, setLogged, logout }}>
+    <GuestContext.Provider value={{ logged, setLogged, logout }}>
       {children}
     </GuestContext.Provider>
   );

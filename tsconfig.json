@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "app/api/listas/route.js", "app/api/users/route.js"  ],
+, "app/api/listas/route.js", "app/api/users/route.js", "app/components/footer.jsx", "app/components/header.jsx", "app/listas/page.jsx"  ],
   "exclude": ["node_modules"]
 }

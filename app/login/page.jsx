@@ -13,7 +13,7 @@ export default function LoginPage(){
 
     async function login(){
         try {
-            const reponse = await fetch('api/users', {
+            const response = await fetch('api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -21,19 +21,18 @@ export default function LoginPage(){
                 body: JSON.stringify({dni, password}),
             });
 
-            const data = await reponse.json();
+            const data = await response.json();
             if(data.success){
                 alert("¡Contraseña correcta! Bienvenido.");
-                localStorage.setItem("token", data.token);
-                context.setGuest(data.user);
+                sessionStorage.setItem("token", data.token);
+                sessionStorage.setItem("user", JSON.stringify(data.user));
                 context.setLogged(true);
                 setDni("");
                 setPassword("");
                 router.push('/'); 
             }else{
-                alert(data.error || "Error al iniciar sesión");
+                alert("Error al iniciar seison: " + (data.error || "Error desconocido"));
             }
-
 
         }catch(error){
             alert("Error al iniciar sesión:", error);
@@ -41,45 +40,45 @@ export default function LoginPage(){
     }
 
     return(
-        <div className="flex items-center justify-center my-30">
-            <section className="w-full max-w-sm rounded-lg border bg-[#fff] border-zinc-200  p-6 shadow-sm">
+        <div className="flex items-center justify-center py-12">
+            <section className="w-full max-w-md rounded-[32px] border border-slate-700 bg-slate-950/80 p-8 shadow-[0_30px_80px_rgba(15,23,42,0.28)] backdrop-blur-sm animate-fadeIn">
                 <div className="mb-6 text-center">
-                    <h2 className="text-2xl font-bold text-zinc-900">Login</h2>
-                    <p className="mt-2 text-sm text-zinc-600">
+                    <h2 className="text-3xl font-bold text-slate-100">Login</h2>
+                    <p className="mt-2 text-sm text-slate-400">
                         Ingresa a tu cuenta para organizar tus fiestas.
                     </p>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-5">
                     <div>
-                        <label className="mb-1 block text-sm font-medium text-zinc-700 text-start"> DNI </label>
+                        <label className="mb-2 block text-sm font-medium text-slate-300 text-left">DNI</label>
                         <input
                             id="dni"
                             type="text"
                             placeholder="Ingrese su DNI"
-                            className="w-full text-center  rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                            className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/30"
                             value={dni}
                             onChange={(e) => setDni(e.target.value)}
                         />
                     </div>
 
                     <div>
-                        <label className="mb-1 block text-sm font-medium text-zinc-700 text-start ">Contraseña</label>
+                        <label className="mb-2 block text-sm font-medium text-slate-300 text-left">Contraseña</label>
                         <input
                             id="password"
                             type="password"
                             placeholder="Ingrese su contraseña"
-                            className="w-full text-center rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                            className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/30"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
 
-                    <button onClick={login} className="w-full rounded-md bg-blue-600 px-4 py-2 font-semibold text-[var(--color-foreground)] transition hover:opacity-85 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    <button onClick={login} className="w-full rounded-2xl bg-gradient-to-r from-slate-700 to-indigo-600 px-4 py-3 font-semibold text-white transition hover:brightness-110 focus:outline-none focus:ring-4 focus:ring-indigo-400/30">
                         Entrar
                     </button>
                 </div>
-                <p className="text-black mt-6">¿No tienes cuenta? <a href="/register" className="text-blue-500 hover:underline">Regístrate aquí</a></p>
+                <p className="text-slate-600 mt-6 text-center">¿No tienes cuenta? <a href="/register" className="text-fuchsia-600 font-semibold hover:underline">Regístrate aquí</a></p>
             </section>
         </div>
     )
