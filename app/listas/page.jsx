@@ -2,7 +2,7 @@
 
 import Listas from "@/app/components/listas/lista";
 import Intro from "@/app/components/listas/intro";
-import ModalCrearRutina from "@/app/components/listas/modalCrearFiesta";
+import ModalCrearFiesta from "@/app/components/listas/modalCrearFiesta";
 import { useState } from "react";
 
 export default function ListasPage() {
@@ -24,7 +24,7 @@ export default function ListasPage() {
       </section>
       <Intro onOpenModal={handleCreateFiesta} />
       <Listas />
-      {showModal && <ModalCrearRutina onClose={closeCreateFiesta} />}
+      {showModal && <ModalCrearFiesta onClose={closeCreateFiesta} />}
     </div>
   );
 }
