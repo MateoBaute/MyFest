@@ -1,6 +1,10 @@
 'use client'
+import { useGuests } from "@/app/context/GuestContext";
 
 export default function Intro({ onOpenModal }) {
+    const context = useGuests();
+    const isLogged = context.logged;
+
     return (
         <div className="mt-4 space-y-4 rounded-3xl border border-slate-700 bg-slate-950/70 p-6 shadow-[0_18px_40px_rgba(15,23,42,0.28)] backdrop-blur-sm animate-slide-up">
             <h2 className="text-2xl font-bold text-slate-100">Introducción a tus listas</h2>
@@ -28,9 +32,11 @@ export default function Intro({ onOpenModal }) {
             <p className="text-slate-300">
                 Usa esta sección para administrar todos tus eventos y llevar el control de tus invitados de forma sencilla.
             </p>
+            {isLogged ? (
             <button onClick={onOpenModal} className="mt-4 rounded-2xl bg-gradient-to-r from-slate-700 to-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-slate-800/40 transition hover:scale-[1.01] hover:shadow-slate-900/40">
                 Crear mi lista
             </button>
+            ) : null}
         </div>
     )
 }
