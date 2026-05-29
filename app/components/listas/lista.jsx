@@ -4,26 +4,51 @@ import ModalGestionarFiesta from "./modalGestionarFiesta";
 import { useGuests } from "@/app/context/GuestContext"
 
 export default function Lista() {
-    const [fiestas, setFiestas] = useState([]);
     const [selectedFiesta, setSelectedFiesta] = useState(null);
-    const context = useGuests()
+    const [fiestas, setFiestas] = useState([]);
 
+    const context = useGuests()
     const isLogged = context.logged;
 
-    useEffect(() => {
-        const fetchFiestas = async () => {
-            const user = JSON.parse(sessionStorage.getItem("user"))
-            const userId = user ? user.id : null;
-            const response = await fetch('/api/mostrarFiesta', {
+    async function eliminarFiesta(id) {
+        if (!confirm("¿Estás seguro de que deseas eliminar esta fiesta? Esta acción no se puede deshacer.")) {
+            return;
+        }
+        try {
+            const response = await fetch('/api/eliminarFiesta', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ idUser: userId })
+                body: JSON.stringify({ idFiesta: id })
             });
             const data = await response.json();
-            setFiestas(data.fiestas || []);
-        };
+            if (data.success) {
+                alert('Fiesta eliminada correctamente');
+                setFiestas(prevFiestas => prevFiestas.filter(fiesta => fiesta.id !== id));
+                fetchFiestas();
+            }
+        } catch (error) {
+            console.error('Error al eliminar la fiesta:', error);
+        }
+    }
+
+
+    const fetchFiestas = async () => {
+        const user = JSON.parse(sessionStorage.getItem("user"))
+        const userId = user ? user.id : null;
+        const response = await fetch('/api/mostrarFiesta', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ idUser: userId })
+        });
+        const data = await response.json();
+        setFiestas(data.fiestas || []);
+    };
+
+    useEffect(() => {
         fetchFiestas();
     }, []);
 
@@ -67,6 +92,12 @@ export default function Lista() {
                                                 className="w-full rounded-xl bg-slate-800/80 py-2 text-xs font-semibold text-slate-300 transition hover:bg-indigo-600 hover:text-white"
                                             >
                                                 Gestionar lista
+                                            </button>
+                                            <button
+                                                onClick={() => eliminarFiesta(fiesta.id)}
+                                                className="w-full rounded-xl bg-slate-800/80 py-2 text-xs font-semibold text-slate-300 transition hover:bg-indigo-600 hover:text-white"
+                                            >
+                                                Eliminar fiesta
                                             </button>
                                         </div>
                                     </div>
